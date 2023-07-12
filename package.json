@@ -7,7 +7,6 @@
   "author": "", 
   "main": "index.js",
   "bin": {
-    "message-queues-worker": "./bin/index.js",
     "message-queues-worker:dev": "node --require dotenv/config $(yarn bin)/bin/index.js"
   },
   "repository": {
