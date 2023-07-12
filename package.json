@@ -1,0 +1,33 @@
+{
+  "name": "message-queues",
+  "version": "0.0.1",
+  "description": "It will help for processing of aws sqs",
+  "keywords": [], 
+  "license": "UNLICENSED",
+  "author": "", 
+  "main": "index.js",
+  "bin": {
+    "message-queues-worker": "./bin/index.js",
+    "message-queues-worker:dev": "node --require dotenv/config $(yarn bin)/bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iphios/message-queues.git"
+  },
+  "scripts": {
+    "lint": "DEBUG=eslint:cli,eslint:file-enumerator,eslint:cli-engine,eslint:source-code-fixer eslint . --fix"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.363.0",
+    "debug": "^4.3.4",
+    "json-schema": "git+ssh://git@github.com:iphios/json-schema.git#v0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.44.0",
+    "eslint-plugin-custom": "git+ssh://git@github.com:iphios/eslint-plugin.git#v0.0.1"
+  },
+  "engines": {
+    "node": "18.*.*"
+  },
+  "private": true
+}
