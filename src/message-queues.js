@@ -109,7 +109,7 @@ const send = async (data) => {
 
   const command = new SendMessageCommand(input);
   const response = await sqsClient.send(command);
-  log.default(`MessageId: ${response.MessageId}, status: "queued", data: "${JSON.stringify(data)}"`);
+  log.messageQueue(`MessageId: ${response.MessageId}, status: "queued", body: "${JSON.stringify(data.message)}"`);
   return response.MessageId;
 };
 
@@ -121,7 +121,7 @@ const receive = async (queueUrl) => {
 
   const command = new ReceiveMessageCommand(input);
   const response = await sqsClient.send(command);
-  return response.Messages;
+  return response?.Messages || [];
 };
 
 /**

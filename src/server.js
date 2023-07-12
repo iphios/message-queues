@@ -11,7 +11,8 @@ const server = {
   _app: null,
   // set up app
   init: async function() {
-    this._app = App.init();
+    this._app = await App.init(process.env.MESSAGE_QUEUE_URL);
+    await this._app.init();
     await this._app.start();
   },
   // set up app terminate function
