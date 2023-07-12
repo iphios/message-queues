@@ -1,5 +1,3 @@
 'use strict';
 
-require('./src/message-queues.js');
-
-module.exports = null;
+module.exports = require('./src/message-queues.js');
