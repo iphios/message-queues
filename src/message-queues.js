@@ -81,7 +81,7 @@ const create = async (queueName) => {
  * @param {Object} data.message.meta - message meta object.
  * @param {string} data.message.meta.className - execution class name.
  * @param {Object} data.message.payload - message payload data.
- * @returns {string} MessageId.
+ * @returns {Promise<string>} MessageId.
  */
 const send = async (data) => {
   jsonSchemaValidate('message:send', data);
