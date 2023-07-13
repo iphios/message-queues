@@ -1,25 +1,12 @@
 'use strict';
 
-// require configs
-const config = require('./../config/aws.js');
-
 // require packages
 require('./schema.js');
 const {
   validate:jsonSchemaValidate
 } = require('json-schema');
 const log = require('./../lib/log.js');
-const {
-  SQSClient,
-  GetQueueAttributesCommand,
-  CreateQueueCommand,
-  ListQueuesCommand,
-  SendMessageCommand,
-  ReceiveMessageCommand,
-  DeleteMessageCommand
-} = require('@aws-sdk/client-sqs');
-
-const sqsClient = new SQSClient(config);
+const aws = require('./../lib/aws.js');
 
 const info = async (queueUrl) => {
   const input = {
@@ -27,8 +14,8 @@ const info = async (queueUrl) => {
     AttributeNames: ['ApproximateNumberOfMessages', 'ApproximateNumberOfMessagesNotVisible']
   };
 
-  const command = new GetQueueAttributesCommand(input);
-  const response = await sqsClient.send(command);
+  const command = aws.sqs.getQueueAttributesCommand(input);
+  const response = await aws.sqs.client.send(command);
   return {
     approximateNumberOfMessages: response.Attributes.ApproximateNumberOfMessages,
     approximateNumberOfMessagesNotVisible: response.Attributes.ApproximateNumberOfMessagesNotVisible
@@ -44,8 +31,8 @@ const list = async () => {
   };
   let response = null;
   do {
-    const command = new ListQueuesCommand(input);
-    response = await sqsClient.send(command);
+    const command = new aws.sqs.listQueuesCommand(input);
+    response = await aws.sqs.client.send(command);
 
     if (Object.hasOwn(response, 'QueueUrls')) {
       output.push(...response.QueueUrls);
@@ -77,9 +64,9 @@ const create = async (queueName) => {
       FifoThroughputLimit: 'perMessageGroupId'
     }
   };
-  const command = new CreateQueueCommand(input);
+  const command = new aws.sqs.createQueueCommand(input);
 
-  const response = await sqsClient.send(command);
+  const response = await aws.sqs.client.send(command);
   return response.QueueUrl;
 };
 
@@ -107,8 +94,8 @@ const send = async (data) => {
     input.MessageDeduplicationId = data.messageDeduplicationId;
   }
 
-  const command = new SendMessageCommand(input);
-  const response = await sqsClient.send(command);
+  const command = new aws.sqs.sendMessageCommand(input);
+  const response = await aws.sqs.client.send(command);
   log.messageQueue(`MessageId: ${response.MessageId}, status: "queued", body: "${JSON.stringify(data.message)}"`);
   return response.MessageId;
 };
@@ -119,8 +106,8 @@ const receive = async (queueUrl) => {
     MaxNumberOfMessages: 10
   };
 
-  const command = new ReceiveMessageCommand(input);
-  const response = await sqsClient.send(command);
+  const command = new aws.sqs.receiveMessageCommand(input);
+  const response = await aws.sqs.client.send(command);
   return response?.Messages || [];
 };
 
@@ -137,8 +124,8 @@ const remove = async (data) => {
     ReceiptHandle: data.receiptHandle
   };
 
-  const command = new DeleteMessageCommand(input);
-  await sqsClient.send(command);
+  const command = new aws.sqs.deleteMessageCommand(input);
+  await aws.sqs.client.send(command);
 };
 
 module.exports = {
