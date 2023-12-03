@@ -8,7 +8,7 @@ Add this as dependency in package.json
 ```
 "dependencies": {
   ...
-  "message-queues": "git+ssh://git@github.com:iphios/message-queues.git#<commit_id>/<tag_id>"
+  "message-queues": "git+ssh://git@github.com/iphios/message-queues.git#<commit_id>/<tag_id>"
   ...
 }
 ```
